@@ -10,9 +10,12 @@ const port = Number(process.env.PORT || 8080);
 
 if (process.env.REDISTOGO_URL) {
   var rtg = require('url').parse(process.env.REDISTOGO_URL);
-  var redis = require('redis').createClient(rtg.port, rtg.hostname);
+  var redis = require('redis').createClient({
+    port: rtg.port,
+    host: rtg.hostname,
+  });
 
-  redis.auth(rtg.auth.split(':')[1]);
+  redis.auth(process.env.REDISTOGO_PASSWORD);
 } else {
   var redis = require('redis').createClient();
 }
@@ -50,7 +53,7 @@ app.use(express.static('public'));
 
 app.get('/', async (req, res) => {
   const url = req.query.url as unknown as string;
-  const metadata = await getMetadata(url);
+  const metadata = await getMetadata(url, );
   return res
     .set('Access-Control-Allow-Origin', '*')
     .status(200)
