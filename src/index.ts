@@ -53,7 +53,7 @@ app.use(express.static('public'));
 
 app.get('/', async (req, res) => {
   const url = req.query.url as unknown as string;
-  const metadata = await getMetadata(url, );
+  const metadata = await getMetadata(url);
   return res
     .set('Access-Control-Allow-Origin', '*')
     .status(200)

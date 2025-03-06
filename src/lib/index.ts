@@ -22,7 +22,6 @@ export const getMetadata = async (url: string): Promise<MetaResult | null> => {
     const data: any = await getLinkPreview(url, {
       followRedirects: "follow",
     });
-    console.log(data);
     const result: MetaResult = {
       images: data.images,
       meta: {
