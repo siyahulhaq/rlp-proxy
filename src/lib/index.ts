@@ -1,6 +1,7 @@
 import { MetaResult } from '../types';
 import axios, { AxiosRequestConfig } from 'axios';
-import { getLinkPreview } from "link-preview-js";
+import { parser } from 'html-metadata-parser';
+
 
 const TWITTER_API_URL = 'https://api.twitter.com/2';
 
@@ -19,27 +20,24 @@ const config: AxiosRequestConfig = {
 
 export const getMetadata = async (url: string): Promise<MetaResult | null> => {
   try {
-    const data: any = await getLinkPreview(url, {
-      followRedirects: "follow",
-    });
-    const result: MetaResult = {
-      images: data.images,
+    const metadata = await parser(url);
+    const og = metadata.og;
+    return {
       meta: {
-        title: data.title,
-        description: data.description
+        title: metadata.meta?.title,
+        description: metadata.meta?.description,
       },
       og: {
-        title: data.title,
-        description: data.description,
-        image: data.images[0],
-        images: data.images.map((image: string) => ({src: image})),
-        site_name: data.siteName,
-        type: data.mediaType,
-        url: data.url,
-        videos: data.videos.map((video: string) => ({src: video})),
+        title: og?.title,
+        description: og?.description,
+        image: og?.image,
+        site_name: og?.site_name,
+        images: metadata.images ?? [],
+        type: og?.type,
+        url: og?.url,
       },
+      images: metadata.images ?? [],
     };
-    return result;
   } catch (err) {
     console.log(err);
     return null;

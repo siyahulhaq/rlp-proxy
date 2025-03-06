@@ -21,6 +21,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^1.19.0",
     "axios": "^0.21.1",
+    "cheerio": "^1.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-limiter": "^1.6.1",
